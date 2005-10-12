@@ -1,0 +1,153 @@
+Fvoxedit -- Festival diphone database editor
+============================================
+
+Fvoxedit is a program extending the Snd sound editor with functions for editing
+Festival diphone databases.  It can be typically used in the process of
+creation and debugging of a new Festival diphone voice.
+
+While Fvoxedit has been being successfully used for editing the Czech diphone
+database, it isn't tested by many users.  So you should expect bugs and user
+interface inconveniences.  You can send bug reports, questions and suggestions
+to the e-mail address given at the end of this file.  Patches are especially
+welcome.
+
+* Installation
+
+First you must have installed the Snd sound editor.
+
+Then copy this directory somewhere in the Snd load path and name it `fvoxedit'.
+Alternatively, you can just name it `fvoxedit' and put it in ANY-DIRECTORY and
+then put the following line into your ~/.snd file:
+
+  (set! %load-path (cons "ANY-DIRECTORY" %load-path))
+
+In any case, add the following lines to your ~/.snd:
+
+  (load-from-path "fvoxedit/snd-exports.scm")
+  (use-modules (fvoxedit snd-fvoxedit)
+               (fvoxedit snd-splitter)
+               (fvoxedit festival))
+  
+* Configuration
+
+Configuration values are set to reasonable defaults, so you needn't change most
+of them initially.  But unless you run Fvoxedit directly in the database
+directory and your dic file is named dic/diph.est, you must set the following
+configuration variables in your ~/.snd file (replace `...'  with the path to
+your diphone database and `dic/diph.est' with the actual name of your dic file):
+
+  (set! *voice-directory* "...")
+  (set! *diphone-dic-file* "dic/diph.est")
+
+Additionally, you can customize whether pitchmarks and phone boundaries are
+displayed in the editor:
+
+  (set! *show-pitchmarks* #f)  ; don't display pitchmarks
+  (set! *show-labels* #t)  ; display phone boundaries
+
+Splitter operation can be adjusted using the following configuration variables:
+
+  (set! *noise-level* 0.02)  ; noise level in silences, ranging from 0.0 to 1.0
+  (set! *min-silence-length* 0.5)  ; minimum silence length in seconds
+
+Read the source code to get information about other configuration variables.
+
+* Usage
+
+Fvoxedit consists of two main parts: The diphone database editor and the
+recording splitter.
+
+The recording splitter serves for splitting the initial recording to single
+recorded words, within the places where silences are detected.  You can invoke
+this facility from the menu item "Splitter/Identify Silences".  When the
+silences are successfully identified, you can save the given parts by invoking
+the "Splitter/Save Parts" menu item.  If the silences are identified very
+incorrectly, you can try to adjust the Splitter configuration parameters
+described above.  If there is only a few mistakes, you can adjust the marks
+manually using usual Snd mark editing functions.
+
+The diphone database editor allows you to change diphone boundaries, pitchmarks
+and phone boundaries in the label files.  You start by loading a diphone file,
+which can be performed in several ways:
+
+- "Fvoxedit/Load diphone" menu item loads a given diphone.  The diphone can be
+  specified either by its name, or by its file number.  This is the basic
+  diphone loading command.
+
+  Using file numbers is useful when you perform initial sequential database
+  editing, especially in combination with the "Fvoxedit/Load Next Diphone"
+  command, which loads the diphone from the file having the given number in its
+  name.
+
+- "Fvoxedit/Load all diphones" menu item loads all diphone files of a given
+  diphone.  The diphone must be specified by its name.  This command is useful
+  if you need to select the best diphone file from the available alternatives.
+
+- "Fvoxedit/Load all diphone candidates" menu item loads not only diphones
+  present in the dic file, but all matching phone pairs found in the label
+  files.  This command is useful when all the diphone alternatives in the dic
+  file are unsatisfactory and you try to find another alternative among the
+  recorded words.
+
+Once the diphone file is loaded, you can edit the marks in it.  Red marks are
+diphone boundaries, blue marks are pitchmarks, green marks are phone boundaries
+from the *.lab files.  You can toggle displaying pitchmarks and phone
+boundaries using the "Fvoxedit/Toggle pitchmarks" and "Fvoxedit/Toggle labels"
+menu commands.  You can play various parts of the sound file using the
+"Fvoxedit/Play *" commands.
+
+Marks can be moved in the common Snd way by dragging them with mouse.  But
+usually you will probably use Fvoxedit commands:
+
+- Middle mouse button moves the nearest mark (with the expeption of diphone
+  boundaries) to the given place.
+
+- Left side mouse button (button-7) moves the nearest mark on the left to the
+  given place.
+
+- Right side mouse button (button-8) moves the nearest mark on the right to the
+  given place.
+
+- Mouse wheel moves the nearest mark left or right.
+
+- The "Fvoxedit/Align mid diphone mark with label" menu command moves the
+  middle diphone boundary mark to the phone mark nearest to the current Snd
+  cursor position.
+
+- The "Fvoxedit/Center diphone boundary mark" menu command centres the left or
+  right diphone boundary mark between the phone marks around the Snd cursor.
+
+When you are finished with mark editing, you can save the changes using the
+"Fvoxedit/Save" menu command.  The "Fvoxedit/Save as default" menu command
+additionally makes the current diphone file to be the diphone default in the
+dic file.
+
+The following key bindings are available for all the menu commands:
+
+  a ... align middle diphone mark to the phone boundary nearest to the current
+        cursor position
+  c ... center the nearest diphone mark between the phone boundaries around the
+        current cursor position
+  C ... load all corresponding phone pairs found in the label files
+  d ... load given diphone file, which is the default in the dic file
+  D ... load all diphone files of the given diphone present in the dic file
+  i ... place initial pause phone mark 0.1 seconds before the first non-silence
+        phone mark
+  l ... toggle displaying phone boundaries from the label files
+  n ... load the next diphone
+  p ... toggle displaying pitchmarks
+  s ... save changes
+  S ... save changes and make the current diphone the default in the dic file
+  t ... synthesize the sample via the Festival SayPhones function
+  T ... synthesize the sample via the Festival SayPhones function and load it
+  1 ... play the first part of the diphone
+  2 ... play the second part of the diphone
+  3 ... play the whole diphone
+  4 ... play single phones separately
+  5 ... play the phone where the cursor is placed
+
+Please note the key bindings work in Snd only when a displayed sound curve is
+focused.
+
+
+-- Milan Zamazal <pdm@freebsoft.org>
