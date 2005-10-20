@@ -13,7 +13,8 @@ welcome.
 
 * Installation
 
-First you must have installed the Snd sound editor.
+First you must have installed the Snd sound editor.  Fvoxedit was tested with
+Snd 7.8, it doesn't work with some older versions.
 
 Then copy this directory somewhere in the Snd load path and name it `fvoxedit'.
 Alternatively, you can just name it `fvoxedit' and put it in ANY-DIRECTORY and
