@@ -1,6 +1,6 @@
 ;;; Festival related functions
 
-;; Copyright (C) 2005 Brailcom, o.p.s.
+;; Copyright (C) 2005, 2010 Brailcom, o.p.s.
 
 ;; Author: Milan Zamazal <pdm@brailcom.org>
 
@@ -48,6 +48,8 @@
 (define-public *powfacts-dir* "etc/pf")
 
 (define-public *tmp-sound-file* #f)
+
+(define-public *sample-frequency* 32000)
 
 
 ;;; Utility functions

@@ -1,6 +1,6 @@
 ;;; Editing Festival diphone definitions in snd
 
-;; Copyright (C) 2005 Brailcom, o.p.s.
+;; Copyright (C) 2005, 2010 Brailcom, o.p.s.
 
 ;; Author: Milan Zamazal <pdm@brailcom.org>
 
@@ -118,10 +118,10 @@
     (add-hook! draw-mark-hook fvoxedit-draw-mark-hook))
 
 (define (seconds->samples* secs)
-  (* 2 (seconds->samples secs)))
+  (inexact->exact (round (* (/ *sample-frequency* 22050) (seconds->samples secs)))))
 
 (define (samples->seconds* secs)
-  (/ (samples->seconds secs) 2))
+  (/ (samples->seconds secs) (/ *sample-frequency* 22050)))
 
 (define (prompt prompt function)
   (or (selected-sound) (new-sound))
